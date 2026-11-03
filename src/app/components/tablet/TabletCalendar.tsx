@@ -69,27 +69,24 @@ export function TabletCalendar({
           <Button
             variant={view === 'agenda' ? 'default' : (darkMode ? 'secondary' : 'outline')}
             size="sm"
-            className="h-12 px-5 text-base font-semibold"
             onClick={() => setView('agenda')}
-            className={darkMode && view !== 'agenda' ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white' : ''}
+            className={`h-12 px-5 text-base font-semibold ${darkMode && view !== 'agenda' ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white' : ''}`}
           >
             Agenda
           </Button>
           <Button
             variant={view === 'week' ? 'default' : (darkMode ? 'secondary' : 'outline')}
             size="sm"
-            className="h-12 px-5 text-base font-semibold"
             onClick={() => setView('week')}
-            className={darkMode && view !== 'week' ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white' : ''}
+            className={`h-12 px-5 text-base font-semibold ${darkMode && view !== 'week' ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white' : ''}`}
           >
             Week
           </Button>
           <Button
             variant={view === 'month' ? 'default' : (darkMode ? 'secondary' : 'outline')}
             size="sm"
-            className="h-12 px-5 text-base font-semibold"
             onClick={() => setView('month')}
-            className={darkMode && view !== 'month' ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white' : ''}
+            className={`h-12 px-5 text-base font-semibold ${darkMode && view !== 'month' ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white' : ''}`}
           >
             Month
           </Button>
