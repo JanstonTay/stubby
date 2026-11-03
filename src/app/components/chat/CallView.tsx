@@ -1,0 +1,195 @@
+import { PhoneOff, Mic, MicOff, Video, VideoOff, Volume2, User, Clock, Users, ChevronLeft, Speaker } from 'lucide-react';
+import { useState, useEffect } from 'react';
+
+interface CallViewProps {
+  chat: any;
+  type: 'voice' | 'video';
+  onEndCall: () => void;
+}
+
+export function CallView({ chat, type, onEndCall }: CallViewProps) {
+  const [isMuted, setIsMuted] = useState(false);
+  const [isVideoOn, setIsVideoOn] = useState(type === 'video');
+  const [duration, setDuration] = useState(0);
+
+  const isGroup = chat?.type === 'group' || chat?.type === 'community' || chat?.name?.toLowerCase().includes('group');
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setDuration(prev => prev + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const participants = [
+    { name: 'You', initial: 'Y', status: 'Active', isMuted: false },
+    { name: 'John', initial: 'J', status: 'Active', isMuted: true },
+    { name: 'Sarah', initial: 'S', status: 'Active', isMuted: false },
+    { name: 'Mike', initial: 'M', status: 'Active', isMuted: false },
+  ];
+
+  return (
+    <div className="h-screen flex flex-col relative overflow-hidden bg-[#1a1c1e] text-white">
+      
+      {/* Top Header - Alignment matches Image 2 (Timer Top-Left) */}
+      <div className="absolute top-8 left-6 right-6 flex items-center justify-between z-50">
+        <div className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full border border-white/10 text-[10px] font-bold shadow-lg flex items-center gap-2">
+           {isGroup && isVideoOn && <span className="opacity-60">{chat?.name} • </span>}
+           <span>{formatDuration(duration)}</span>
+        </div>
+
+        <div className="w-10" /> {/* Spacer */}
+      </div>
+
+      {/* Main Content Area */}
+      <main className="flex-1 flex flex-col items-center justify-center relative">
+        
+        {/* LAYOUT: VIDEO CALL (FRIEND) - Image 2 Specifics */}
+        {isVideoOn && !isGroup && (
+           <>
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#1a1c1e]">
+                 {/* Center Avatar & Name (Image 2) */}
+                 <div className="flex flex-col items-center animate-in zoom-in duration-500">
+                    <div className="w-32 h-32 rounded-full border-4 border-slate-700/50 bg-[#3e3e3e] flex items-center justify-center mb-4 shadow-2xl">
+                       <span className="text-5xl font-normal opacity-50">{chat?.name?.charAt(0) || 'S'}</span>
+                    </div>
+                    <h2 className="text-sm font-bold opacity-80 tracking-tight">{chat?.name || 'Sarah Johnson'}</h2>
+                 </div>
+              </div>
+
+              {/* Top-Right Rectangular Self Popup (Image 2) */}
+              <div className="absolute top-8 right-8 w-24 h-32 bg-[#3e3e3e]/80 rounded-2xl border border-white/10 flex items-center justify-center z-10 shadow-2xl overflow-hidden animate-in slide-in-from-right-8 duration-700">
+                 <User className="text-white opacity-20" size={32} />
+              </div>
+           </>
+        )}
+
+        {/* LAYOUT: VIDEO CALL (GROUP) - Following Image 1 (Wireframe 6.1.2) */}
+        {isVideoOn && isGroup && (
+          <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-0.5 bg-black pt-20">
+            {participants.map((p, i) => (
+              <div key={i} className="bg-[#1a1c1e] flex flex-col items-center justify-center relative border border-white/5">
+                <div className="w-16 h-16 rounded-full bg-[#3e3e3e] border border-white/10 flex items-center justify-center mb-2 shadow-lg">
+                  <span className="text-xl font-bold opacity-60 text-white">{p.initial}</span>
+                </div>
+                <p className="text-[10px] font-bold opacity-60 text-white">{p.name}</p>
+                
+                {p.isMuted && (
+                  <div className="absolute bottom-4 right-4 w-6 h-6 rounded-full bg-rose-500 flex items-center justify-center shadow-lg">
+                    <MicOff size={10} className="text-white" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* LAYOUT: VOICE CALL (FRIEND) - Image 3 logic */}
+        {!isVideoOn && !isGroup && (
+          <div className="flex flex-col items-center animate-in fade-in duration-700">
+            <div className="w-48 h-48 rounded-full bg-[#3e3e3e] flex items-center justify-center text-white/50 border-4 border-white/5 mb-12 shadow-2xl">
+              <span className="text-6xl font-normal opacity-40">{chat?.name?.charAt(0) || 'S'}</span>
+            </div>
+            
+            <div className="text-center space-y-1 mb-2">
+              <h2 className="text-2xl font-bold tracking-tight">{chat?.name || 'Sarah Johnson'}</h2>
+              <p className="text-xs text-slate-500 font-medium">Voice Call</p>
+            </div>
+
+            <p className="text-sm font-medium text-slate-500 mb-12">{formatDuration(duration)}</p>
+
+            <div className="flex items-center gap-2 text-slate-500 font-bold uppercase tracking-widest text-[9px]">
+               <Volume2 size={14} />
+               <span>Speaker</span>
+            </div>
+          </div>
+        )}
+
+        {/* LAYOUT: VOICE CALL (GROUP) */}
+        {!isVideoOn && isGroup && (
+          <div className="w-full flex flex-col items-center animate-in fade-in duration-500">
+            <h2 className="text-2xl font-black uppercase tracking-widest text-center mb-1">
+               {chat?.name || 'CS 101 Study Group'}
+            </h2>
+            
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-16 italic">
+               Group Voice Call • {formatDuration(duration)}
+            </p>
+
+            <div className="grid grid-cols-2 gap-x-12 gap-y-12 mb-16">
+              {participants.map((p, i) => (
+                <div key={i} className="flex flex-col items-center">
+                  <div className={`w-20 h-20 rounded-full flex items-center justify-center border transition-all ${
+                    p.initial === 'Y' ? 'bg-indigo-600/20 border-indigo-500' : 'bg-[#3e3e3e] border-white/10'
+                  } mb-3 shadow-lg`}>
+                    <span className="text-2xl font-bold text-white/60">{p.initial}</span>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs font-bold mb-0.5">{p.name}</p>
+                    <div className="flex items-center gap-1 mt-0.5">
+                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                       <p className="text-[9px] font-black text-white uppercase tracking-tighter opacity-80">Active</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center gap-2 text-slate-500 font-bold uppercase tracking-widest text-[9px]">
+               <Volume2 size={14} />
+               <span>Speaker</span>
+            </div>
+          </div>
+        )}
+
+      </main>
+
+      {/* Control Area - Functional for both Voice/Video */}
+      <footer className="w-full pt-10 pb-12 border-t border-white/5 bg-[#111214]">
+        <div className="max-w-xs mx-auto flex items-center justify-between mb-6">
+          {/* Mute */}
+          <button 
+            onClick={() => setIsMuted(!isMuted)}
+            className={`w-14 h-14 rounded-full flex items-center justify-center bg-[#3e3e3e] border border-white/10 ${isMuted ? 'text-rose-500' : 'text-white'}`}
+          >
+            {isMuted ? <MicOff size={22} /> : <Mic size={22} />}
+          </button>
+
+          {/* Camera */}
+          <button 
+            onClick={() => setIsVideoOn(!isVideoOn)}
+            className={`w-14 h-14 rounded-full flex items-center justify-center border border-white/10 ${isVideoOn ? 'bg-indigo-600 text-white' : 'bg-[#3e3e3e] text-white'}`}
+          >
+            {isVideoOn ? <Video size={22} /> : <VideoOff size={22} />}
+          </button>
+
+          {/* Speaker (Audio Output) */}
+          <button 
+            className="w-14 h-14 rounded-full flex items-center justify-center bg-[#3e3e3e] border border-white/10 text-white"
+          >
+            <Volume2 size={22} />
+          </button>
+
+          {/* End Call */}
+          <button 
+            onClick={onEndCall}
+            className="w-14 h-14 bg-rose-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-rose-500/10 active:scale-95 transition-transform"
+          >
+            <PhoneOff size={24} strokeWidth={2.5} className="rotate-[135deg]" />
+          </button>
+        </div>
+        
+        {/* Friend's Name Label below controls (Image 2) - Only for Friend Video Calls */}
+        {!isGroup && isVideoOn && (
+           <p className="text-center text-[10px] font-bold text-white/40 uppercase tracking-[0.3em]">{chat?.name}</p>
+        )}
+      </footer>
+    </div>
+  );
+}
