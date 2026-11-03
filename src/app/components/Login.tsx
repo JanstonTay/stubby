@@ -29,7 +29,8 @@ export function Login({ onNavigate }: LoginProps) {
   return (
     <div className="h-full min-h-0 bg-white flex flex-col">
       {/* Login Page Content */}
-      <main className="flex-1 min-h-0 overflow-y-auto flex flex-col justify-center px-8 py-12 bg-white">
+      <main className="flex-1 min-h-0 overflow-y-auto flex flex-col justify-center px-6 py-10 sm:px-10 lg:px-12 bg-white">
+        <div className="w-full max-w-xl mx-auto">
         {/* Logo/Branding */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6 animate-in zoom-in duration-700">
@@ -38,7 +39,7 @@ export function Login({ onNavigate }: LoginProps) {
               <img 
                 src="https://lh3.googleusercontent.com/d/1sVqKxdc4nSztVwyayVbQfNL1oVits_W9" 
                 alt="Stubby Logo" 
-                className="h-60 object-contain relative transition-transform hover:scale-110 duration-500" 
+              className="h-40 sm:h-48 object-contain relative transition-transform hover:scale-105 duration-500"
               />
             </div>
           </div>
@@ -113,6 +114,7 @@ export function Login({ onNavigate }: LoginProps) {
               </button>
             </p>
           </div>
+        </div>
         </div>
       </main>
     </div>

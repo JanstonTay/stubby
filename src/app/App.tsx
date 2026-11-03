@@ -436,10 +436,10 @@ export default function App() {
   const [activeCall, setActiveCall] = useState<{chat: any, type: 'voice' | 'video'} | null>(null);
   const [isCallMinimized, setIsCallMinimized] = useState(true);
 
-  // Detect tablet screen size
+  // Use the wider navigation layout on tablets and desktop screens.
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsTablet(window.innerWidth >= 1024);
+      setIsTablet(window.innerWidth >= 768);
     };
     
     checkScreenSize();
@@ -1482,11 +1482,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-50 to-indigo-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-      {/* Tablet Prototype Frame */}
-      <div className="w-full max-w-[1024px] h-[calc(100svh-2rem)] sm:h-[calc(100svh-3rem)] lg:h-[768px] max-h-[768px] min-h-[640px] bg-white rounded-3xl shadow-2xl overflow-hidden border-8 border-slate-800 relative">
-        {/* Screen Content */}
-        <div className="w-full h-full overflow-hidden relative">
+    <div className="h-dvh min-h-[100svh] w-full overflow-hidden bg-white">
+      <div className="h-full w-full overflow-hidden relative">
           {currentPage === 'login' ? (
             <Login onNavigate={onNavigate} />
           ) : isTablet ? (
@@ -1598,7 +1595,6 @@ export default function App() {
               }}
             />
           )}
-        </div>
       </div>
     </div>
   );
