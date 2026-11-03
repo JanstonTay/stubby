@@ -1510,7 +1510,7 @@ export default function App() {
             </TabletLayout>
           ) : (
             <div className="max-w-md mx-auto bg-white h-full min-h-0 shadow-[0_0_50px_rgba(0,0,0,0.03)] relative flex flex-col overflow-hidden">
-              <div className={`flex-1 ${
+              <div className={`min-h-0 flex-1 overflow-y-auto overscroll-y-contain ${
                 currentPage !== 'login' && 
                 currentPage !== 'chat' && 
                 currentPage !== 'call' && 
